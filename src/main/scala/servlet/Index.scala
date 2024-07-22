@@ -1,8 +1,6 @@
 package com.example.main.servlet
 
-import javax.servlet.http.HttpServlet
-import javax.servlet.http.HttpServletRequest
-import javax.servlet.http.HttpServletResponse
+import javax.servlet.http.{HttpServlet, HttpServletRequest, HttpServletResponse}
 import com.example.main.HttpServletRequestParser
 
 class Index extends HttpServlet {
@@ -12,6 +10,10 @@ class Index extends HttpServlet {
   ): Unit = {
     val request = HttpServletRequestParser.parse(req)
     resp.setContentType("text/plain")
-    resp.getWriter.println("Hello, World!")
+    request match {
+      case Left(exception) =>
+        resp.getWriter.println(s"Error: ${exception.getMessage}")
+      case Right(req) => resp.getWriter.println(s"Hello, ${req.id}!")
+    }
   }
 }

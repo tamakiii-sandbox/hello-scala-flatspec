@@ -2,38 +2,37 @@ import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 import org.scalatestplus.mockito.MockitoSugar
 import org.mockito.Mockito._
-import org.mockito.ArgumentMatchers._
-import org.mockito.ArgumentCaptor
-
-import javax.servlet.http.HttpServlet
-import javax.servlet.http.HttpServletRequest
-import javax.servlet.http.HttpServletResponse
+import javax.servlet.http.{HttpServletRequest, HttpServletResponse}
 import java.io.{PrintWriter, StringWriter}
-
 import com.example.main.servlet.Index
 
 class IndexSpec extends AnyFlatSpec with Matchers with MockitoSugar {
-  "doGet" should "set content type to text/plain" in {
+
+  "doGet" should "return error when id is missing" in {
     val request = mock[HttpServletRequest]
     val response = mock[HttpServletResponse]
     val writer = new StringWriter
     when(response.getWriter).thenReturn(new PrintWriter(writer))
+    when(request.getParameter("id")).thenReturn(null)
 
     val servlet = new Index
     servlet.doGet(request, response)
 
     verify(response).setContentType("text/plain")
+    writer.toString should include("Error: ID is empty")
   }
 
-  it should "write 'Hello, World!' to the response" in {
+  it should "return Hello with id when id is present" in {
     val request = mock[HttpServletRequest]
     val response = mock[HttpServletResponse]
     val writer = new StringWriter
     when(response.getWriter).thenReturn(new PrintWriter(writer))
+    when(request.getParameter("id")).thenReturn("12345")
 
     val servlet = new Index
     servlet.doGet(request, response)
 
-    writer.toString should include("Hello, World!")
+    verify(response).setContentType("text/plain")
+    writer.toString should include("Hello, 12345!")
   }
 }

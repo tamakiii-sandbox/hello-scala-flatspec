@@ -9,7 +9,7 @@ object HttpServletRequestParser {
 
     id match {
       case null => Left(new Exception("ID is empty"))
-      case _    => Right(Request(req))
+      case _    => Right(Request(id))
     }
   }
 }
