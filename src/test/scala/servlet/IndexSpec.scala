@@ -19,19 +19,19 @@ class IndexSpec
   var response: HttpServletResponse = uninitialized
   var writer: StringWriter = uninitialized
   var servlet: Index = uninitialized
-  var mockParser: HttpServletRequestParser = uninitialized
+  var parser: HttpServletRequestParser = uninitialized
 
   override def beforeEach() = {
     request = mock[HttpServletRequest]
     response = mock[HttpServletResponse]
     writer = new StringWriter
-    mockParser = mock[HttpServletRequestParser]
-    servlet = new Index(mockParser)
+    parser = mock[HttpServletRequestParser]
+    servlet = new Index(parser)
     when(response.getWriter).thenReturn(new PrintWriter(writer))
   }
 
   "doGet" should "return error when id is missing" in {
-    when(mockParser.parse(request)).thenReturn(Left(new Exception("ID is empty")))
+    when(parser.parse(request)).thenReturn(Left(new Exception("ID is empty")))
 
     servlet.doGet(request, response)
 
@@ -40,7 +40,7 @@ class IndexSpec
   }
 
   it should "return Hello with id when id is present" in {
-    when(mockParser.parse(request)).thenReturn(Right(Request("12345")))
+    when(parser.parse(request)).thenReturn(Right(Request("12345")))
 
     servlet.doGet(request, response)
 
