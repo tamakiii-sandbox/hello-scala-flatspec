@@ -34,6 +34,6 @@ class IndexSpec extends AnyFlatSpec with Matchers with MockitoSugar {
     val servlet = new Index
     servlet.doGet(request, response)
 
-    writer.toString should include ("Hello, World!")
+    writer.toString should include("Hello, World!")
   }
 }
