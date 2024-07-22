@@ -10,5 +10,6 @@ lazy val root = project
 
     libraryDependencies ++= Seq(
       "org.scalameta" %% "munit" % "1.0.0" % Test,
+      "org.scalatest" %% "scalatest" % "3.2.19" % Test,
     ),
   )
